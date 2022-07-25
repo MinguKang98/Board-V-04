@@ -1,5 +1,6 @@
 package com.study.boardv04back.criteria;
 
+import lombok.Builder;
 import lombok.Getter;
 
 /**
@@ -12,5 +13,17 @@ public class SearchCriteria {
     private String createdDateTo;
     private Integer categoryId;
     private String text;
+
+    @Builder
+    public SearchCriteria(String createdDateFrom,
+                          String createdDateTo,
+                          Integer categoryId,
+                          String text) {
+
+        this.createdDateFrom = createdDateFrom;
+        this.createdDateTo = createdDateTo;
+        this.categoryId = categoryId;
+        this.text = text;
+    }
 
 }
