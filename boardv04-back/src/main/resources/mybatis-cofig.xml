@@ -9,5 +9,6 @@
 
     <typeAliases>
         <package name="com.study.boardv04back.domain"/>
+        <package name="com.study.boardv04back.criteria"/>
     </typeAliases>
 </configuration>
