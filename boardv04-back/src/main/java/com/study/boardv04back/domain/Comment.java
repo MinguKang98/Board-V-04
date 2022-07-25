@@ -2,6 +2,7 @@ package com.study.boardv04back.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.apache.ibatis.type.Alias;
 
 /**
@@ -9,6 +10,7 @@ import org.apache.ibatis.type.Alias;
  */
 @Getter
 @Alias(value = "Comment")
+@NoArgsConstructor
 public class Comment {
 
     private int commentId;

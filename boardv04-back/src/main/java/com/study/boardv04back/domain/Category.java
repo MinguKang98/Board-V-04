@@ -1,6 +1,7 @@
 package com.study.boardv04back.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.apache.ibatis.type.Alias;
 
 /**
@@ -8,6 +9,7 @@ import org.apache.ibatis.type.Alias;
  */
 @Getter
 @Alias(value = "Category")
+@NoArgsConstructor
 public class Category {
 
     private int categoryId;
