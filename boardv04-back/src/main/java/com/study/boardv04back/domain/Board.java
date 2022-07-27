@@ -7,7 +7,7 @@ import org.apache.ibatis.type.Alias;
  * 게시글을 나타내는 클래스
  */
 @Getter
-@Setter(value = AccessLevel.PRIVATE)
+@Setter
 @Alias(value = "Board")
 @NoArgsConstructor
 public class Board {
