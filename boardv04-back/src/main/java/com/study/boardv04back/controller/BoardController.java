@@ -18,7 +18,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -143,6 +145,21 @@ public class BoardController {
         boardService.updateBoard(board, addFileList, deleteFileList);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping(value = "/{boardId}/password-check")
+    public ResponseEntity<Map<String, String>> passwordCheck(@PathVariable("boardId") int boardId,
+                                                             @RequestParam("password") String inputPassword) {
+
+        Board originBoard = boardService.getBoardById(boardId);
+
+        Map<String, String> resultMap = new HashMap<>();
+        if (originBoard.getPassword().equals(inputPassword)) {
+            resultMap.put("result", "success");
+        } else {
+            resultMap.put("result", "fail");
+        }
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
 }
