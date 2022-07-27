@@ -35,7 +35,7 @@ public class CommentController {
 
         commentService.addComment(comment);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 }
