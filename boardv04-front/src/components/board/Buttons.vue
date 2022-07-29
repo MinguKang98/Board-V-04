@@ -35,7 +35,7 @@ export default {
     },
     getPasswordCheckView(type) {
       this.$router.push({
-        path: `/passwordCheck`,
+        path: `/passwordCheck/${this.$route.params.id}`,
         query: {
           curPage: this.$route.query.curPage,
           createdDateFrom: this.$route.query.createdDateFrom,

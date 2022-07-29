@@ -4,6 +4,7 @@ import HomeView from '../views/HomeView.vue'
 import ListView from "@/views/ListView";
 import BoardView from "@/views/BoardView";
 import WriteView from "@/views/WriteView";
+import PasswordCheckView from "@/views/PasswordCheckView";
 
 Vue.use(VueRouter)
 
@@ -35,6 +36,11 @@ const routes = [
     path: '/write',
     name: 'write',
     component: WriteView
+  },
+  {
+    path: '/passwordCheck/:id',
+    name: 'passwordCheck',
+    component: PasswordCheckView
   }
 ]
 
