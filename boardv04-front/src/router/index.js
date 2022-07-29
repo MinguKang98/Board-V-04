@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ListView from "@/views/ListView";
+import BoardView from "@/views/BoardView";
 
 Vue.use(VueRouter)
 
@@ -23,6 +24,11 @@ const routes = [
     path: '/list',
     name: 'list',
     component: ListView
+  },
+  {
+    path: '/board/:id',
+    name: 'board',
+    component: BoardView
   }
 ]
 
