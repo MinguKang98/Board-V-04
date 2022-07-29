@@ -32,6 +32,7 @@
         </div>
       </form>
     </div>
+    <br>
 
     <div class="container">
       <div class="row">
@@ -85,7 +86,8 @@
             </a>
           </li>
           <li v-for="page in pages" class="page-item">
-              <a v-text="page" v-on:click="pageChange(page)" v-bind:class="{'active': curPage === page }" class="page-link" ></a>
+            <a v-if="curPage === page" v-text="page" href="#"  class="page-link active" ></a>
+            <a v-else v-text="page" v-on:click="pageChange(page)"  class="page-link" ></a>
           </li>
           <li v-on:click="pageChange(nextPage)" class="page-item">
             <a class="page-link">
@@ -111,11 +113,11 @@ export default {
   data() {
     return {
       categories: [],
-      curPage: 1,
-      createdDateFrom: '',
-      createdDateTo: '',
-      categoryId: 0,
-      text: '',
+      curPage: (this.$route.query.curPage == null) ? 1 : Number(this.$route.query.curPage),
+      createdDateFrom: this.$route.query.createdDateFrom,
+      createdDateTo: this.$route.query.createdDateTo,
+      categoryId: (this.$route.query.categoryId == null) ? 0 : Number(this.$route.query.categoryId),
+      text: this.$route.query.text,
       boards: [],
       totalBoardCount: 0
     }
@@ -197,6 +199,7 @@ export default {
       this.changeUrl();
     },
     submitForm() {
+      this.curPage = 1;
       this.getBoards();
       this.getTotalBoardCount();
       this.changeUrl();
