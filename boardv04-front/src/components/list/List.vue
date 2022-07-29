@@ -56,7 +56,7 @@
             <td v-if="board.fileExist === true"><i class="fas fa-paperclip"></i></td>
             <td v-else></td>
             <td>
-              <a>
+              <a v-on:click="getBoardView(board.boardId)">
                 <span>{{board.title}} ({{board.commentCount}})</span>
               </a>
             </td>
@@ -105,7 +105,6 @@
 </template>
 
 <script>
-import axios from "axios";
 
 export default {
   name: "List",
@@ -149,7 +148,7 @@ export default {
   },
   methods: {
     getCategories() {
-      axios.get("http://localhost:9090/categories")
+      this.$axios.get("http://localhost:9090/categories")
           .then(response => {
             const data = response;
             this.categories = data.data;
@@ -159,7 +158,7 @@ export default {
           });
     },
     getTotalBoardCount() {
-      axios.get("http://localhost:9090/boards/count",{
+      this.$axios.get("http://localhost:9090/boards/count",{
         params: {
           curPage: this.curPage,
           createdDateFrom: this.createdDateFrom,
@@ -176,7 +175,7 @@ export default {
           });
     },
     getBoards() {
-      axios.get("http://localhost:9090/boards", {
+      this.$axios.get("http://localhost:9090/boards", {
         params: {
           curPage: this.curPage,
           createdDateFrom: this.createdDateFrom,
@@ -202,6 +201,17 @@ export default {
       this.getTotalBoardCount();
       this.changeUrl();
     },
+    getBoardView(val) {
+      this.$router.push({
+        path: `/board/${val}`,
+        query: {
+          curPage: this.curPage,
+          createdDateFrom: this.createdDateFrom,
+          createdDateTo: this.createdDateTo,
+          categoryId: this.categoryId,
+          text: this.text
+        }});
+    },
     changeUrl() {
       this.$router.push({
         path: '/list', query: {
@@ -211,7 +221,7 @@ export default {
           categoryId: this.categoryId,
           text: this.text
         }});
-    }
+      }
     },
     created() {
           this.getCategories(),
