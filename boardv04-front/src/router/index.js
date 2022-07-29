@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ListView from "@/views/ListView";
 import BoardView from "@/views/BoardView";
+import WriteView from "@/views/WriteView";
 
 Vue.use(VueRouter)
 
@@ -29,6 +30,11 @@ const routes = [
     path: '/board/:id',
     name: 'board',
     component: BoardView
+  },
+  {
+    path: '/write',
+    name: 'write',
+    component: WriteView
   }
 ]
 

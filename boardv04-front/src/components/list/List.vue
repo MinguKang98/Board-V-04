@@ -102,6 +102,10 @@
         </ul>
       </nav>
 
+      <button v-on:click="getWriteView" class="btn btn-primary btn-lg" style="float:right" type="button">
+        등록
+      </button>
+
     </div>
   </div>
 </template>
@@ -193,6 +197,16 @@ export default {
             console.log(error)
           });
     },
+    changeUrl() {
+      this.$router.push({
+        path: '/list', query: {
+          curPage: this.curPage,
+          createdDateFrom: this.createdDateFrom,
+          createdDateTo: this.createdDateTo,
+          categoryId: this.categoryId,
+          text: this.text
+        }});
+    },
     pageChange(val) {
       this.curPage = val;
       this.getBoards();
@@ -215,22 +229,23 @@ export default {
           text: this.text
         }});
     },
-    changeUrl() {
+    getWriteView() {
       this.$router.push({
-        path: '/list', query: {
+        path: "/write",
+        query: {
           curPage: this.curPage,
           createdDateFrom: this.createdDateFrom,
           createdDateTo: this.createdDateTo,
           categoryId: this.categoryId,
           text: this.text
         }});
-      }
-    },
-    created() {
-          this.getCategories(),
-          this.getBoards(),
-          this.getTotalBoardCount()
     }
+  },
+  created() {
+        this.getCategories(),
+        this.getBoards(),
+        this.getTotalBoardCount()
+  }
 }
 
 </script>
