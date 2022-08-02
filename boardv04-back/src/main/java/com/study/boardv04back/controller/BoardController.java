@@ -14,10 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +40,7 @@ public class BoardController {
      * @param searchCriteria : 검색 조건
      * @return
      */
-    @GetMapping(value = "")
+    @GetMapping(value = "/boards")
     public ResponseEntity<List<BoardListDto>> getBoards(
             @RequestParam(value = "curPage", defaultValue = "1") int curPage,
             @ModelAttribute SearchCriteria searchCriteria) {
@@ -58,7 +58,9 @@ public class BoardController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @PostMapping(value = "")
+
+
+    @PostMapping(value = "/boards")
     public ResponseEntity saveBoard(@ModelAttribute FileDto fileDto,
                                     @ModelAttribute @Valid BoardWriteDto boardWriteDto,
                                     BindingResult bindingResult) throws IOException {
@@ -70,28 +72,27 @@ public class BoardController {
         board.setFileExist(fileDto.isFileExist());
 
         List<MultipartFile> multipartFileList = fileDto.getFileList();
+
         List<File> addFileList = fileUtils.getAddFileList(multipartFileList);
 
         boardService.addBoard(board, addFileList);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        int boardId = board.getBoardId();
+        System.out.println("boardId = " + boardId);
+
+        return new ResponseEntity<>(boardId, HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "/count")
-    public ResponseEntity<Integer> getTotalBoardCount(
-            @RequestParam(value = "curPage", defaultValue = "1") int curPage,
-            @ModelAttribute SearchCriteria searchCriteria) {
+    @GetMapping(value = "/boards/count")
+    public ResponseEntity<Integer> getTotalBoardCount(@ModelAttribute SearchCriteria searchCriteria) {
 
         int totalBoardCount = boardService.getTotalBoardCountBySearchCriteria(searchCriteria);
 
         return new ResponseEntity<>(totalBoardCount, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{boardId}")
-    public ResponseEntity<BoardViewDto> getBoard(
-            @PathVariable("boardId") int boardId,
-            @RequestParam(value = "curPage", defaultValue = "1") int curPage,
-            @ModelAttribute SearchCriteria searchCriteria) {
+    @GetMapping(value = "/boards/{boardId}")
+    public ResponseEntity<BoardViewDto> getBoard(@PathVariable("boardId") int boardId) {
 
         boardService.updateVisitCount(boardId);
 
@@ -102,54 +103,57 @@ public class BoardController {
     }
 
 
-    @DeleteMapping(value = "/{boardId}")
-    public ResponseEntity deleteBoard(
-            @PathVariable("boardId") int boardId,
-            @RequestParam(value = "curPage", defaultValue = "1") int curPage,
-            @ModelAttribute SearchCriteria searchCriteria) {
+    @DeleteMapping(value = "/boards/{boardId}")
+    public ResponseEntity deleteBoard(@PathVariable("boardId") int boardId) {
 
         boardService.deleteBoard(boardId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping(value = "/{boardId}")
+    @PutMapping(value = "/boards/{boardId}")
     public ResponseEntity updateBoard(
             @PathVariable("boardId") int boardId,
-            @RequestParam(value = "curPage", defaultValue = "1") int curPage,
-            @ModelAttribute SearchCriteria searchCriteria,
             @ModelAttribute @Valid BoardModifyDto boardModifyDto,
             @ModelAttribute FileDto fileDto,
-            MultipartHttpServletRequest request,
+            @RequestParam(value = "deleteFileList") List<Integer> deleteFileListByFileId,
             BindingResult bindingResult) throws IOException {
 
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
+        Map<String, String> resultMap = new HashMap<>();
+
         String originPassword = boardService.getBoardById(boardId).getPassword();
         String inputPassword = boardModifyDto.getPassword();
         if (!originPassword.equals(inputPassword)) {
-
+            resultMap.put("result", "fail");
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
         }
 
-        // TODO updateBoard 다시 구성
         Board board = boardModifyDto.toBoard();
         board.setBoardId(boardId);
-        List<File> originFileList = fileService.getFileListByBoardId(boardId);
-        List<MultipartFile> multipartFileList = fileDto.getFileList();
-
-        List<File> deleteFileList = fileUtils.getDeleteFileList(originFileList);
-        List<File> addFileList = fileUtils.getAddFileList(multipartFileList, boardId);
+        List<File> addFileList;
+        if (fileDto.getFileList() == null) {
+            addFileList = new ArrayList<>();
+        }else{
+            addFileList = fileUtils.getAddFileList(fileDto.getFileList(), boardId);
+        }
+        List<File> deleteFileList = deleteFileListByFileId.stream()
+                .map(i -> fileService.getFileById(i))
+                .collect(Collectors.toList());
 
         boardService.updateBoard(board, addFileList, deleteFileList);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        resultMap.put("result", "success");
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/{boardId}/password-check")
-    public ResponseEntity<Map<String, String>> passwordCheck(@PathVariable("boardId") int boardId,
-                                                             @RequestParam("password") String inputPassword) {
+    @PostMapping(value = "/boards/{boardId}/password-check")
+    public ResponseEntity<Map<String, String>> passwordCheck(
+            @PathVariable("boardId") int boardId,
+            @RequestParam("password") String inputPassword) {
 
         Board originBoard = boardService.getBoardById(boardId);
 
