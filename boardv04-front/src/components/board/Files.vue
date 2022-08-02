@@ -1,6 +1,6 @@
 <template>
   <div class="row mb-5">
-    <p v-for="file in files">
+    <p v-for="file in files" >
       <i class="fas fa-download"></i>
       <a v-on:click="downloadFile(file.fileId, file.originName)" v-text="file.originName" ></a>
     </p>

@@ -5,9 +5,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileInputStream;
@@ -37,6 +35,9 @@ public class FileUtils {
     public List<File> getAddFileList(List<MultipartFile> multipartFileList) throws IOException {
 
         List<File> fileList = new ArrayList<>();
+        if (multipartFileList == null) {
+            return fileList;
+        }
         for (MultipartFile multipartFile : multipartFileList) {
             if (multipartFile != null && !multipartFile.isEmpty()) {
                 String originFileName = multipartFile.getOriginalFilename();
@@ -89,21 +90,6 @@ public class FileUtils {
             }
         }
 
-        return fileList;
-    }
-
-    public List<File> getDeleteFileList(List<File> originFileList) throws IOException {
-
-        List<File> fileList = new ArrayList<>();
-        for (File originFile : originFileList) {
-            String fileDeleteCheck = "FILE_" + originFile.getFileId();
-//            if (request.getParameter(fileDeleteCheck) == null) {
-//                fileList.add(originFile);
-//
-//                java.io.File deleteFile = new java.io.File(DOWNLOAD_DIR + SEPARATOR + originFile.getSystemName());
-//                deleteFile.delete();
-//            }
-        }
         return fileList;
     }
 

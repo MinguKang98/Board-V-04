@@ -1,5 +1,5 @@
 <template>
-  <form v-on:submit.prevent="saveBoard" method="post" name="writeForm" id="writeForm" enctype="multipart/form-data">
+  <form v-on:submit.prevent="saveBoard"method="post" name="writeForm"id="writeForm" enctype="multipart/form-data">
     <table class="table">
       <tr>
         <th class="table-primary pl-3 ">카테고리</th>
@@ -134,12 +134,12 @@ export default {
       }
 
       const regExp = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{4,15}$/;
-      if (regExp.test(this.password) == false) {
+      if (regExp.test(this.password) === false) {
         this.error.password = "4글자 이상, 16글자 미만인 영문/숫자/특수문자의 조합";
         return false;
       }
 
-      if (this.password != this.passwordCheck) {
+      if (this.password !== this.passwordCheck) {
         this.error.password = "비밀번호와 비밀번호 확인이 일치하지 않습니다";
         return false;
       }

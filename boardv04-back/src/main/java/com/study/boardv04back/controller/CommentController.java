@@ -26,7 +26,7 @@ public class CommentController {
 
     @PostMapping(value = "/boards/{boardId}/comments")
     public ResponseEntity saveComment(@PathVariable("boardId") int boardId,
-                                      @ModelAttribute CommentDto commentDto) {
+                                      @RequestBody CommentDto commentDto) {
 
         Comment comment = Comment.builder()
                 .content(commentDto.getContent())

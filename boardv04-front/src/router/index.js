@@ -5,6 +5,7 @@ import ListView from "@/views/ListView";
 import BoardView from "@/views/BoardView";
 import WriteView from "@/views/WriteView";
 import PasswordCheckView from "@/views/PasswordCheckView";
+import ModifyView from "@/views/ModifyView";
 
 Vue.use(VueRouter)
 
@@ -41,7 +42,12 @@ const routes = [
     path: '/passwordCheck/:id',
     name: 'passwordCheck',
     component: PasswordCheckView
-  }
+  },
+  {
+    path: '/board/:id/modify',
+    name: 'modify',
+    component: ModifyView
+  },
 ]
 
 const router = new VueRouter({

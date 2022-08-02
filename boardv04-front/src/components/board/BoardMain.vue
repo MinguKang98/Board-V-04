@@ -44,6 +44,7 @@ export default {
             this.getCategory(this.board.categoryId)
           })
     },
+
     getCategory(val) {
       this.$axios.get(`http://localhost:9090/categories/${val}`)
           .then(response => {

@@ -116,12 +116,14 @@ export default {
   name: "List",
   data() {
     return {
+
+
       categories: [],
       curPage: (this.$route.query.curPage == null) ? 1 : Number(this.$route.query.curPage),
-      createdDateFrom: this.$route.query.createdDateFrom,
-      createdDateTo: this.$route.query.createdDateTo,
+      createdDateFrom: (this.$route.query.createdDateFrom == null) ? '' : this.$route.query.createdDateFrom,
+      createdDateTo: (this.$route.query.createdDateTo == null) ? '' : this.$route.query.createdDateTo,
       categoryId: (this.$route.query.categoryId == null) ? 0 : Number(this.$route.query.categoryId),
-      text: this.$route.query.text,
+      text: (this.$route.query.text == null) ? '' : this.$route.query.text,
       boards: [],
       totalBoardCount: 0
     }
